@@ -4,7 +4,7 @@ Donate link: https://webheadcoder.com/donate-clear-cache-for-me
 Tags: cache, clear, purge, js, css
 Requires at least: 3.8
 Tested up to: 6.6
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,10 @@ Note:  Since some caching systems run in the `shutdown` hook, this plugin also r
 1. The button on the dashboard.  
 
 == Changelog ==
+
+= 2.3 =
+Updated Clear Cache for Me on dashboard.  
+Added option to exclude cache clearing for theme's CSS and JS assets.  
 
 = 2.2 =
 Added cache clearing when automatic updates complete.  

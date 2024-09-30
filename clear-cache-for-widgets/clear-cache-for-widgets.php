@@ -2,14 +2,14 @@
 /*
 Plugin Name: Clear Cache For Me
 Plugin URI: https://webheadcoder.com/clear-cache-for-me/
-Description: Purges all cache on WPEngine, W3 Total Cache, WP Super Cache, WP Fastest Cache when updating widgets, menus, settings.  Forces a browser to reload a theme's CSS and JS files.
+Description: Purges all cache on WPEngine, W3 Total Cache, WP Super Cache, WP Fastest Cache when updating widgets, menus, settings.  Can force a browser to reload a theme's CSS and JS files.
 Author: Webhead LLC
 Author URI: https://webheadcoder.com 
-Version: 2.2
+Version: 2.3
 */
 
 
-define( 'CCFM_VERSION', '2.2' );
+define( 'CCFM_VERSION', '2.3' );
 define( 'CCFM_PLUGIN', __FILE__ );
 
 require_once( 'caching-plugins.php' );
@@ -266,8 +266,13 @@ function ccfm_clear_cache_for_all() {
 
     do_action( 'ccfm_clear_cache_for_me', $ccfm_source );
 
-    $time = time();
-    update_option( '_ccfm_style_timestamp_theme', $time );
+    $clear_assets = ccfm_option( 'clear_assets', 'only' );
+
+    $time = false;
+    if ( $clear_assets == 'always' ||  ( $clear_assets == 'only' && $ccfm_source == 'admin-bar-button' ) ) {
+        $time = time();
+        update_option( '_ccfm_style_timestamp_theme', $time );
+    }
 
     do_action( 'ccfm_clear_cache_for_css_js', $time );
 }
@@ -286,7 +291,7 @@ function ccfm_dashboard_widget_output() {
     $infotext = ccfm_option( 'btn_instructions', __( 'If you\'re not seeing your changes on your public pages, it might be cached.  Click the button below to see a fresh version of your pages.', 'ccfm' ) );
     ?>
 <div class="ccfm_widget">
-    <form method="post">
+    <form class="ccfm_widget_form" method="post">
         <?php wp_nonce_field( 'ccfm' ); ?>
         <?php echo ( $infotext ) ? '<p class="info">' . $infotext . '</p>' : ''; ?><div class="ccfm-button">
             <input type="submit" name="ccfm" class="button button-primary button-large" value="<?php _e( 'Clear Cache Now!', 'ccfm' ); ?>">
@@ -347,9 +352,19 @@ function ccfm_admin_head() {
 }
 
 #dashboard_ccfm_widget .ccfm-button {
-    display: block;
-    width: 100%;
+    display: inline-block;
+    width: auto;
     text-align: left;
+}
+
+#dashboard_ccfm_widget .ccfm-admin-bar-msg {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    border-radius: 5px;
+    line-height: 32px;
+    width: 135px;
+    text-align: center;
 }
 
 
@@ -457,11 +472,15 @@ function ccfm_show_src_version ( $src, $handle ) {
     $key = ccfm_custom_src_key( $src );
     $timestamp = get_option( '_ccfm_style_timestamp_' . $key, '' );
     $dev_mode_assets = ccfm_option( 'dev_mode_assets', 0 );
+    $clear_assets = ccfm_option( 'clear_assets', 'only' );
     if ( empty( $timestamp ) && $dev_mode_assets == 0 ) {
         return $src;
     }
     if ( $dev_mode_assets == 1 ) {
         $timestamp = time();
+    }
+    if ( empty( $timestamp ) || $clear_assets == 'never' ) {
+        return $src;
     }
     $src_parts = explode( '?', $src );
     if ( count( $src_parts ) > 1 ) {

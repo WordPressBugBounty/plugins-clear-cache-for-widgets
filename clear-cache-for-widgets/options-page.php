@@ -155,21 +155,31 @@ function ccfm_options_do_page() {
                                 <option value="<?php echo esc_attr($cap); ?>" <?php selected( ccfm_option( 'btn_cap', 'manage_options' ), $cap );?>><?php echo $cap; ?></option>
                             <?php endforeach; ?>
                         </select>
-                        <br><i><?php _e( 'Users with this capability will be able to see the \'Clear Cache Now!\' button on the dashboard', 'ccfm' ); ?></i>
+                        <p><i><?php _e( 'Users with this capability will be able to see the \'Clear Cache Now!\' button on the dashboard', 'ccfm' ); ?></i></p>
                     </td>
                 </tr>
                 <tr valign="top"><th scope="row"><?php _e( 'Instructions to show above button (optional):', 'ccfm' ); ?></th>
                     <td>
                         <textarea rows="10" name="ccfm_options[btn_instructions]"><?php echo esc_textarea( isset( $options['btn_instructions'] ) ? $options['btn_instructions'] : __( 'If you\'re not seeing your changes on your public pages, it might be cached.  Click the button below to see a fresh version of your pages.', 'ccfm' ) ); ?></textarea>
-                        <br><i><?php _e( 'These instructions will appear on the dashboard above the Clear Cache button.', 'ccfm' ); ?></i>
+                        <p><i><?php _e( 'These instructions will appear on the dashboard above the Clear Cache button.', 'ccfm' ); ?></i></p>
                     </td>
                 </tr>
                 <tr valign="top"><th scope="row"><?php _e( 'Show \'Clear Cache For Me\' button in admin bar.', 'ccfm' ); ?></th>
                     <td>
                         <input type="checkbox" name="ccfm_options[btn_admin_bar]" value="1" <?php checked( 1, isset( $options['btn_admin_bar'] ) ? $options['btn_admin_bar'] : 1 ); ?>> Yes
                         <?php if ( empty( $cache_name ) ) : ?>
-                        <br><i style="color: #dc3232;"><?php _e( 'The button will not show due to the status shown above.', 'ccfm' ); ?></i>
+                        <p><i style="color: #dc3232;"><?php _e( 'The button will not show due to the status shown above.', 'ccfm' ); ?></i></p>
                         <?php endif; ?>
+                    </td>
+                </tr>
+                <tr valign="top"><th scope="row"><?php _e( 'Refresh CSS and JS on Cache Clear', 'ccfm' ); ?></th>
+                    <td>
+                        <select name="ccfm_options[clear_assets]" id="clear_assets">
+                            <option value="always" <?php selected( ccfm_option( 'clear_assets', 'only' ), 'always' );?>>Anytime this plugin clears cache</option>
+                            <option value="only" <?php selected( ccfm_option( 'clear_assets', 'only' ), 'only' );?>>Only when the Clear Cache For Me button is clicked</option>
+                            <option value="never" <?php selected( ccfm_option( 'clear_assets', 'only' ), 'never' );?>>Never</option>
+                        </select>
+                        <p><i><?php _e( 'This feature replaces the version parameter on CSS and JS urls on the front-end to force the browser to fetch a fresh copy when cache is cleared.', 'ccfm' ); ?></i></p>
                     </td>
                 </tr>
 

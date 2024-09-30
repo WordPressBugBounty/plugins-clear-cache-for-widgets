@@ -1,6 +1,10 @@
 jQuery(function($) {
     var in_progress = false;
-    $('#wp-admin-bar-ccfm-link').on('click', function(e){
+
+    $('.ccfm_widget_form').on('submit', ccfmClearCache);
+    $('#wp-admin-bar-ccfm-link').on('click', ccfmClearCache);
+
+    function ccfmClearCache(e){
         e.preventDefault();
         if (in_progress) {
             return;
@@ -20,11 +24,10 @@ jQuery(function($) {
                 else {
                     link.append('<div class="ccfm-admin-bar-msg" style="background: rgba(166, 0, 0, .9);text-align: center;color: #fff;border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;">Failed</div>');
                 }
-                $('.ccfm-admin-bar-msg:last', link.closest('#wp-admin-bar-ccfm-link')).fadeOut(2000, function() {
+                $('.ccfm-admin-bar-msg:last', link).fadeOut(2000, function() {
                     $(this).remove();
                 });
             }
         );
-    });
-
+    }
 });
