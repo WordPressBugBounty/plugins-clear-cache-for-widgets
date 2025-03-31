@@ -50,6 +50,9 @@ function ccfm_get_caching_system_used() {
         case defined( 'LSCWP_V' ):
             $cache_system_key = 'litespeed';
             break;
+        case is_plugin_active( 'wp-cloudflare-page-cache/wp-cloudflare-super-page-cache.php' ):
+            $cache_system_key = 'superpagecache';
+            break;
         default:
             break;
     }
@@ -86,6 +89,9 @@ function ccfm_get_cache_system_name( $cache_system_key = '' ) {
             break;
         case 'siteground':
             $cache_name = 'SiteGround SuperCacher';
+            break;
+        case 'superpagecache':
+            $cache_name = 'Super Page Cache';
             break;
         case 'w3tc':
             $cache_name = 'W3 Total Cache';

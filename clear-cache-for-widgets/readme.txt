@@ -3,8 +3,8 @@ Contributors: webheadllc
 Donate link: https://webheadcoder.com/donate-clear-cache-for-me
 Tags: cache, clear, purge, js, css
 Requires at least: 3.8
-Tested up to: 6.6
-Stable tag: 2.3
+Tested up to: 6.7
+Stable tag: 2.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,7 @@ Works with the following caching plugins:
 * Elementor (CSS cache)
 * Premium Addons for Elementor
 * SiteGround SuperCacher
+* Super Page Cache
 * WP Fastest Cache
 * WP Optimize Cache
 * WP Rocket
@@ -66,6 +67,12 @@ Note:  Since some caching systems run in the `shutdown` hook, this plugin also r
 1. The button on the dashboard.  
 
 == Changelog ==
+
+= 2.4.1 =
+Redeploying.  
+
+= 2.4 =
+Added cache clearing for Super Page Cache.  
 
 = 2.3 =
 Updated Clear Cache for Me on dashboard.  
