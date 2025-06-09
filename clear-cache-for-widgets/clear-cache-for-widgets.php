@@ -5,11 +5,11 @@ Plugin URI: https://webheadcoder.com/clear-cache-for-me/
 Description: Purges all cache on WPEngine, W3 Total Cache, WP Super Cache, WP Fastest Cache when updating widgets, menus, settings.  Can force a browser to reload a theme's CSS and JS files.
 Author: Webhead LLC
 Author URI: https://webheadcoder.com 
-Version: 2.4.1
+Version: 2.4.2
 */
 
 
-define( 'CCFM_VERSION', '2.4.1' );
+define( 'CCFM_VERSION', '2.4.2' );
 define( 'CCFM_PLUGIN', __FILE__ );
 
 require_once( 'caching-plugins.php' );
@@ -51,7 +51,7 @@ function ccfm_admin_init() {
         if ( defined( 'QODE_ROOT' ) ) {
             if ( 'options.php' == $pagenow ) {
                 //detect when qode options saved.
-                add_action( 'updated_option', 'ccfm_save_clear_cache_for_qode', 10, 3 );   
+                // add_action( 'updated_option', 'ccfm_save_clear_cache_for_qode', 10, 3 );   
             }
         }
 
@@ -211,11 +211,15 @@ function ccfm_clear_cache_for_all() {
         if ( method_exists( 'WpeCommon', 'purge_memcached' ) ) {
             WpeCommon::purge_memcached();
         }
-        if ( method_exists( 'WpeCommon', 'clear_maxcdn_cache' ) ) {  
-            WpeCommon::clear_maxcdn_cache();
-        }
         if ( method_exists( 'WpeCommon', 'purge_varnish_cache' ) ) {
             WpeCommon::purge_varnish_cache();   
+        }
+        if ( method_exists( 'WpeCommon', 'clear_cdn_cache' ) ) {  
+            WpeCommon::clear_cdn_cache();
+        }
+        // deprecated
+        else if ( method_exists( 'WpeCommon', 'clear_maxcdn_cache' ) ) {  
+            WpeCommon::clear_maxcdn_cache();
         }
     }
     else if ( method_exists( 'WpFastestCache', 'deleteCache' ) && !empty( $wp_fastest_cache ) ) {

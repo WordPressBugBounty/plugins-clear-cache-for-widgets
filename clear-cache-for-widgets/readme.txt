@@ -3,8 +3,8 @@ Contributors: webheadllc
 Donate link: https://webheadcoder.com/donate-clear-cache-for-me
 Tags: cache, clear, purge, js, css
 Requires at least: 3.8
-Tested up to: 6.7
-Stable tag: 2.4.1
+Tested up to: 6.8
+Stable tag: 2.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,6 +67,9 @@ Note:  Since some caching systems run in the `shutdown` hook, this plugin also r
 1. The button on the dashboard.  
 
 == Changelog ==
+
+= 2.4.2 =
+Updated cache clearing function call for WPEngine.  
 
 = 2.4.1 =
 Redeploying.  
