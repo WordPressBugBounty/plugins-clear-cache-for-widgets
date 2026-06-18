@@ -1,6 +1,7 @@
 <?php
 
 const CCFM_ADDITIONAL_CACHE_NAMES = [
+    'cloudflare' => 'Cloudflare',
     'premium-addons-for-elementor' => 'Premium Addons for Elementor'
 ];
 
@@ -53,6 +54,9 @@ function ccfm_get_caching_system_used() {
         case is_plugin_active( 'wp-cloudflare-page-cache/wp-cloudflare-super-page-cache.php' ):
             $cache_system_key = 'superpagecache';
             break;
+        case ccfm_cloudflare_plugin_exists():
+            $cache_system_key = 'cloudflare';
+            break;
         default:
             break;
     }
@@ -77,6 +81,9 @@ function ccfm_get_cache_system_name( $cache_system_key = '' ) {
             break;
         case 'cacheenabler':
             $cache_name = 'Cache Enabler';
+            break;
+        case 'cloudflare':
+            $cache_name = 'Cloudflare';
             break;
         case 'godaddy':
             $cache_name = 'GoDaddy Cache';
@@ -132,6 +139,13 @@ function ccfm_additional_caching_name( $plugin_slug ) {
 function ccfm_clear_addtional_cache( $clear_cache = true ) {
     $plugin_slugs = [];
 
+    if ( ccfm_cloudflare_plugin_exists() && ccfm_get_caching_system_used() !== 'cloudflare' ) {
+        $plugin_slugs[] = 'cloudflare';
+        if ( $clear_cache ) {
+            ccfm_cloudflare_purge_cache();
+        }
+    }
+
     if ( class_exists( 'PremiumAddons\Admin\Includes\Admin_Helper' ) &&
          method_exists(PremiumAddons\Admin\Includes\Admin_Helper::class, 'get_instance') && 
          method_exists(PremiumAddons\Admin\Includes\Admin_Helper::class, 'delete_assets_options') ) {
@@ -143,4 +157,41 @@ function ccfm_clear_addtional_cache( $clear_cache = true ) {
     }
 
     return $plugin_slugs;
+}
+
+/**
+ * Return true when the official Cloudflare plugin purge API is available.
+ */
+function ccfm_cloudflare_plugin_exists() {
+    return defined( 'CLOUDFLARE_PLUGIN_DIR' ) &&
+        class_exists( '\Cloudflare\APO\WordPress\Hooks' ) &&
+        method_exists( '\Cloudflare\APO\WordPress\Hooks', 'purgeCacheEverything' );
+}
+
+/**
+ * Purge everything through the official Cloudflare plugin.
+ */
+function ccfm_cloudflare_purge_cache() {
+    global $cloudflareHooks;
+    static $purged = false;
+
+    if ( $purged ) {
+        return true;
+    }
+
+    if ( is_object( $cloudflareHooks ) && method_exists( $cloudflareHooks, 'purgeCacheEverything' ) ) {
+        $cloudflareHooks->purgeCacheEverything();
+        $purged = true;
+        return true;
+    }
+
+    if ( !ccfm_cloudflare_plugin_exists() ) {
+        return false;
+    }
+
+    $cloudflare_hooks = new \Cloudflare\APO\WordPress\Hooks();
+    $cloudflare_hooks->purgeCacheEverything();
+    $purged = true;
+
+    return true;
 }

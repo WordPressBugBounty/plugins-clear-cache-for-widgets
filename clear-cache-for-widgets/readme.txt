@@ -3,8 +3,8 @@ Contributors: webheadllc
 Donate link: https://webheadcoder.com/donate-clear-cache-for-me
 Tags: cache, clear, purge, js, css
 Requires at least: 3.8
-Tested up to: 6.8
-Stable tag: 2.4.2
+Tested up to: 7.0
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,7 @@ Works with the following caching plugins:
 * Autoptimize
 * Breeze Cache
 * Cache Enabler
+* Cloudflare
 * GoDaddy Cache
 * Kinsta Cache
 * LiteSpeed Cache
@@ -61,6 +62,7 @@ Clears all cache for following actions (requires a caching system above to be ac
 
 Note:  Since some caching systems run in the `shutdown` hook, this plugin also runs in that hook.  This means if PHP does not have enough time, some code including any hooks within the `ccfm_clear_cache_for_all()` function are not guaranteed to run.  If you need code to run, consider using the `ccfm_clear_cache_for_me_setup` hook.  
 
+Some plugins may have "auto purge" (like Cloudflare), but it doesn't cover all the items this plugin covers.
 
 == Screenshots ==
 
